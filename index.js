@@ -19,7 +19,7 @@ class ProductManager {
         const prod = this.products.find((prod) => prod.code === code)
 
         if(prod){
-            console.log("el codigo de " + product.title + " ya existe")
+            console.log(`el codigo de ${product.title} no fue encontrado`)
 
         }
         else{

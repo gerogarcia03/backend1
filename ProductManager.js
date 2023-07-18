@@ -5,7 +5,7 @@ class ProductManager {
         this.path = path
     }
 
-        
+
     async getProducts() {
         try {
             if (fs.existsSync('productos.json')) {
@@ -79,5 +79,11 @@ class ProductManager {
     }
 }
 
-const manager = new ProductManager('productOs.json')
-console.log(manager.getProductById(1))
+
+async function prueba() {
+    const manager = new ProductManager('productos.json')
+    const producto = await manager.getProducts()
+    console.log(producto)
+}
+
+prueba()

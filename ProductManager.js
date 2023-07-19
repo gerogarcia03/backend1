@@ -19,15 +19,17 @@ class ProductManager {
         }
     }
 
-    async addProduct() {
+    async addProduct(obj, title, description, price, thumbnail, code, stock) {
         try {
             const prods = await this.getProducts()
             let id
             if (!prods.length) {
-                id++
+                id = 1
+            } else {
+                id = prods[prods.length-1].id + 1
             }
 
-            prods.push({ ...Object, id })
+            prods.push({ ...obj, id, title, description, price, thumbnail, code, stock})
             await fs.promises.writeFile(this.path, JSON.stringify(prods))
 
         } catch (error) {
@@ -67,11 +69,12 @@ class ProductManager {
 
     async deleteProduct(id) {
         try {
-            const prods = await this.getProducts()
-            const prod = prods.find((prod) => prod.id === id)
+            const productos = await this.getProducts()
+            const prod = productos.filter((prod) => prod.id !== id)
             await fs.promises.writeFile(
                 this.path,
-                JSON.stringify(prod)
+                JSON.stringify(prod),
+                console.log(`El producto con el id ${id} ha sido eliminado`)
             )
         } catch (error) {
             return error
@@ -82,7 +85,7 @@ class ProductManager {
 
 async function prueba() {
     const manager = new ProductManager('productos.json')
-    const producto = await manager.getProducts()
+    const producto = await manager.deleteProduct(0)
     console.log(producto)
 }
 

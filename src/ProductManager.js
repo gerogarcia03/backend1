@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs from 'fs'
 
 class ProductManager {
     constructor(path) {
@@ -82,11 +82,5 @@ class ProductManager {
     }
 }
 
-
-async function prueba() {
-    const manager = new ProductManager('productos.json')
-    const producto = await manager.deleteProduct(0)
-    console.log(producto)
-}
-
-prueba()
+const productManager = new ProductManager('productos.json')
+export default productManager

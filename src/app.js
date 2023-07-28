@@ -12,21 +12,34 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/productos', async (req, res) => {
+
+    const { limit } = req.query
+
     try {
         const prods = await productManger.getProducts()
-        res.status(400).json(prods)
+
+        if (limit) {
+            res.json(prods.slice(0, limit))
+            return;
+        }
+           res.json(prods)
     } catch (error) {
-        res.status(400).json({ error })
+        res.status(500).json({ error })
     }
 }
 )
 
-app.get('/productos/:pid', async(req, res) => {
-    try{
-        const prods = await productManger.getProductsById(id)
-        res.status(400).json(prods)
-    } catch (error){
-        res.status(400).json({error})
+app.get('/productos/:pid', async (req, res) => {
+    try {
+        const pid = req.params
+        const prods = await productManger.getProductsById(pid)
+        res.json(prods)
+    } catch (error) {
+        res.status(500).json({ error })
     }
+})
+
+app.get({
+
 })
 

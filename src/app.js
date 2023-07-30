@@ -20,7 +20,6 @@ app.get('/productos', async (req, res) => {
 
         if (limit) {
             res.json(prods.slice(0, limit))
-            return;
         }
            res.json(prods)
     } catch (error) {
@@ -31,7 +30,7 @@ app.get('/productos', async (req, res) => {
 
 app.get('/productos/:pid', async (req, res) => {
     try {
-        const pid = req.params
+        const pid = req.params.pid
         const prods = await productManger.getProductsById(pid)
         res.json(prods)
     } catch (error) {

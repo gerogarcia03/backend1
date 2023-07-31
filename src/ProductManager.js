@@ -26,10 +26,10 @@ class ProductManager {
             if (!prods.length) {
                 id = 1
             } else {
-                id = prods[prods.length-1].id + 1
+                id = prods[prods.length - 1].id + 1
             }
 
-            prods.push({ ...obj, id, title, description, price, thumbnail, code, stock})
+            prods.push({ ...obj, id, title, description, price, thumbnail, code, stock })
             await fs.promises.writeFile(this.path, JSON.stringify(prods))
 
         } catch (error) {
@@ -78,6 +78,22 @@ class ProductManager {
             )
         } catch (error) {
             return error
+        }
+    }
+    async createProduct(obj) {
+        try {
+            const prods = await this.getProducts()
+            let id
+            if (!prods.length) {
+                id = 1
+            } else {
+                id = prods[prods.length - 1].id + 1
+            }
+            prods.push({ ...obj, id })
+            await fs.promises.writeFile(this.path, JSON.stringify(prods))
+        } catch (error) {
+            return error
+
         }
     }
 }

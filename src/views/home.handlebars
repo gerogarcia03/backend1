@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce</title>
+</head>
+
+<body>
+    <div>
+        <h1>Bienvenidos</h1>
+    </div>
+    <div>
+        <h2>Estos son nuestros productos</h2>
+        <div> 
+            {{#each prods}}
+            <h1>{{prods.title}}</h1>
+            {{/each}}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,1 +1,21 @@
-<h2>este es realtimeProducts</h2>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h2>Elegi alguno de nuestros productos</h2>
+      <div>
+        {{#each allProds}}
+          <h1>{{title}}</h1>
+          <p>{{price}}</p>
+        {{/each}}
+      </div>
+    </div>
+  </body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
+</html>

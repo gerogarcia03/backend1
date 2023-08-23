@@ -8,8 +8,8 @@ class ProductManager {
 
     async getProducts() {
         try {
-            if (fs.existsSync('productos.json')) {
-                const prods = await fs.promises.readFile('productos.json', 'utf-8')
+            if (fs.existsSync('./public/productos.json')) {
+                const prods = await fs.promises.readFile('./public/productos.json', 'utf-8')
                 return JSON.parse(prods)
             } else {
                 return []
@@ -98,5 +98,5 @@ class ProductManager {
     }
 }
 
-const productManager = new ProductManager('productos.json')
+const productManager = new ProductManager('../public/productos.json')
 export default productManager

@@ -7,8 +7,8 @@ class CartManager {
 
     async getCartProd() {
         try {
-            if (fs.existsSync('../cart.json')) {
-                const prods = await fs.promises.readFile('../cart.json', 'utf-8')
+            if (fs.existsSync('./public/cart.json')) {
+                const prods = await fs.promises.readFile('./public/cart.json', 'utf-8')
                 return JSON.parse(prods)
             } else {
                 return []
@@ -39,5 +39,5 @@ class CartManager {
     }
 }
 
-const cartManager = new CartManager('../cart.json')
+const cartManager = new CartManager('../public/cart.json')
 export default cartManager

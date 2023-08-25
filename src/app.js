@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }))
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
-
+app.use(express.static('./public'))
 app.use('/api/productos', productsRouter)
 app.use('/api/cart', cartRouter)
 

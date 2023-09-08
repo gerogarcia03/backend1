@@ -5,6 +5,8 @@ import productsRouter from './routes/prod.router.js'
 import cartRouter from './routes/cart.router.js'
 import { Server } from 'socket.io'
 import productManager from './ProductManager.js'
+import prodsRouter from './routes/prods.router.js'
+import './db/dbConfig.js'
 
 const app = express()
 const port = process.env.PORT || 8080;
@@ -35,6 +37,8 @@ app.set('views', __dirname + '/views')
 app.use(express.static('./public'))
 app.use('/api/productos', productsRouter)
 app.use('/api/cart', cartRouter)
+app.use('/api/mongo', prodsRouter)
+
 
 app.get("/", (req, res) => {
   res.send('holaa')

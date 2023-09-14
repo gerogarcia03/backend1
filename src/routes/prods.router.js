@@ -4,8 +4,8 @@ const router = Router()
 
 router.get('/',async(req,res)=>{
 try {
-    const prods = await prodsMongo.findAll()
-    res.status(200).json({ message: 'Courses found', prods })
+    const prods = await prodsMongo.findAll(req.query)
+    res.status(200).json({ prods })
 } catch (error) {
     res.status(500).json({ error })
 }

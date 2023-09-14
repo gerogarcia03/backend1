@@ -2,10 +2,25 @@ import { prodsModel } from "../db/models/prods.models.js"
 
 class ProdsMongo {
 
-    async findAll() {
+    async findAll(obj) {
+        const { limit, page, ...query } = obj
         try {
-            const prods = await prodsModel.find({})
-            return prods
+            const result = await prodsModel.paginate(
+                query,
+                { limit, page }
+            )
+            const info = {
+                count: result.totalDocs,
+                payload: result.docs,
+                totalPages: result.totalPages,
+                nextLink: result.hasNextPage
+                    ? `http://localhost:8080/api/mongo?page=${result.nextPage}`
+                    : null,
+                prevLink: result.hasPrevPage
+                    ? `http://localhost:8080/api/mongo?page=${result.prevPage}`
+                    : null,
+            }
+            return info
         } catch (error) {
             return error
         }

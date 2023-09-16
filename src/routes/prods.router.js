@@ -41,8 +41,8 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
     try {
-        const result = await prodsMongo.deleteStudent(id)
-        res.status(200).json()
+        const result = await prodsMongo.deleteProd(id)
+        res.status(200).json({result})
     } catch (error) {
         res.status(500).json({ error })
     }

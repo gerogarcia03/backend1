@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs'  
 
 class CartManager {
     constructor(path) {
@@ -7,8 +7,8 @@ class CartManager {
 
     async getCartProd() {
         try {
-            if (fs.existsSync('./public/cart.json')) {
-                const prods = await fs.promises.readFile('./public/cart.json', 'utf-8')
+            if (fs.existsSync(this.path)) {
+                const prods = await fs.promises.readFile(this.path, 'utf-8')
                 return JSON.parse(prods)
             } else {
                 return []
@@ -24,7 +24,7 @@ class CartManager {
         return prodId
     }
 
-    async createCartProd() {
+    async createCartProd(obj) {
         const prods = await this.getCartProd()
         let id
         if (!prods.length) {
@@ -33,11 +33,11 @@ class CartManager {
             id = prods[prods.length - 1].id + 1
         }
         const newCartProd = { cart: [], id }
-        prods.push(newCartProd)
+        prods.push(...obj, id)
         await fs.promises.writeFile(this.path, JSON.stringify(prods))
         return newCartProd
     }
 }
 
-const cartManager = new CartManager('../public/cart.json')
+const cartManager = new CartManager('./public/cart.json')
 export default cartManager

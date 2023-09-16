@@ -3,16 +3,22 @@ import { prodsModel } from "../db/models/prods.models.js"
 class ProdsMongo {
 
     async findAll(obj) {
-        const { limit, page, ...query } = obj
+        const { limit, page, sort, ...query } = obj
         try {
             const result = await prodsModel.paginate(
                 query,
                 { limit, page }
             )
             const info = {
-                count: result.totalDocs,
+                status: result.status,
                 payload: result.docs,
                 totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.prevLink,
                 nextLink: result.hasNextPage
                     ? `http://localhost:8080/api/mongo?page=${result.nextPage}`
                     : null,

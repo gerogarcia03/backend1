@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const createCartProd = await cartManager.createCartProd()
-        res.status(200).json({ createCartProd })
+        res.status(200).json({createCartProd})
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -41,7 +41,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params
     try {
         const result = await productManager.deleteProduct(id)
-        res.status(200).json({ result })
+        res.status(200).json(result)
     } catch (error) {
         res.status
     }

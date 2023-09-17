@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prodsMongo } from "../manager/ProdsMongo.js";
+import { error } from "console";
 const router = Router()
 
 router.get('/',async(req,res)=>{
@@ -26,14 +27,11 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { title } = req.body
-    if (!title) {
-        return res.status(400).json()
-    }
     try {
-        const newProds = await prodsMongo.createProd(req.body)
-        res.status(200).json()
+        const newProds = await prodsMongo.createProd()
+        res.status(200).json(newProds)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error })
     }
 })

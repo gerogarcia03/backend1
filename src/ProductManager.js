@@ -8,8 +8,8 @@ class ProductManager {
 
     async getProducts() {
         try {
-            if (fs.existsSync('./public/productos.json')) {
-                const prods = await fs.promises.readFile('./public/productos.json', 'utf-8')
+            if (fs.existsSync(this.path)) {
+                const prods = await fs.promises.readFile(this.path, 'utf-8')
                 return JSON.parse(prods)
             } else {
                 return []
@@ -28,7 +28,6 @@ class ProductManager {
             } else {
                 id = prods[prods.length - 1].id + 1
             }
-
             prods.push({ ...obj, id, title, description, price, thumbnail, code, stock })
             await fs.promises.writeFile(this.path, JSON.stringify(prods))
 
@@ -82,14 +81,14 @@ class ProductManager {
     }
     async createProduct(obj) {
         try {
-            const prods = await this.getProducts()
+            const prods = await this.addProduct()
             let id
             if (!prods.length) {
                 id = 1
             } else {
                 id = prods[prods.length - 1].id + 1
             }
-            prods.push({ ...obj, id })
+            prods.push(...obj, id)
             await fs.promises.writeFile(this.path, JSON.stringify(prods))
         } catch (error) {
             return error
@@ -98,5 +97,5 @@ class ProductManager {
     }
 }
 
-const productManager = new ProductManager('../public/productos.json')
+const productManager = new ProductManager('./public/productos.json')
 export default productManager

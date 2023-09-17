@@ -20,11 +20,6 @@ class ProdsMongo {
                 hasNextPage: result.hasNextPage,
                 prevLink: result.prevLink,
                 nextLink: result.hasNextPage
-                    ? `http://localhost:8080/api/mongo?page=${result.nextPage}`
-                    : null,
-                prevLink: result.hasPrevPage
-                    ? `http://localhost:8080/api/mongo?page=${result.prevPage}`
-                    : null,
             }
             return info
         } catch (error) {
@@ -43,7 +38,7 @@ class ProdsMongo {
 
     async createProd(obj) {
         try {
-            const newProd = await prodsModel.create(obj)
+            const newProd = await prodsModel.create(...obj, id)
             return newProd
         } catch (error) {
             return error

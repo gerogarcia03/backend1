@@ -1,4 +1,5 @@
-import fs from 'fs'  
+import { error } from 'console'
+import fs from 'fs'
 
 class CartManager {
     constructor(path) {
@@ -25,17 +26,20 @@ class CartManager {
     }
 
     async createCartProd(obj) {
-        const prods = await this.getCartProd()
-        let id
-        if (!prods.length) {
-            id = 1
-        } else {
-            id = prods[prods.length - 1].id + 1
+        try {
+            const prods = await this.getCartProd()
+            let id
+            if (!prods.length) {
+                id = 1
+            } else {
+                id = prods[prods.length - 1].id + 1
+            }
+            prods.push({...obj, id})
+            await fs.promises.writeFile(this.path, JSON.stringify(prods))
+        } catch (error) {
+            return error
         }
-        const newCartProd = { cart: [], id }
-        prods.push(...obj, id)
-        await fs.promises.writeFile(this.path, JSON.stringify(prods))
-        return newCartProd
+
     }
 }
 

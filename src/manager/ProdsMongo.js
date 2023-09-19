@@ -1,5 +1,5 @@
 import { error } from "console"
-import { prodsModel } from "../db/models/prods.models.js"
+import { prodsModel } from '../db/models/prods.models.js'
 
 class ProdsMongo {
 
@@ -39,15 +39,8 @@ class ProdsMongo {
 
     async createProd(obj) {
         try {
-            const newProd = await prodsModel.create(...obj)
-            let id
-            if (!newProd.length) {
-                id = 1
-            } else {
-                id = newProd[newProd.length - 1].id + 1
-            }
-            newProd.push(...obj, id)
-            await fstat.promises.writeFile(this.path, JSON.stringify(newProd))
+            const newProd = await prodsModel.create(obj)
+            return newProd
         } catch (error) {
             return error
         }

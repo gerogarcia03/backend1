@@ -27,8 +27,13 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+    const {id, title, price} = req.body
+    if(!id || !title || !price) {
+        return res.status(400).json({message: 'faltan datos'})
+    }
+    console.log(error)
     try {
-        const newProds = await prodsMongo.createProd()
+        const newProds = await prodsMongo.createProd(req.body)
         res.status(200).json(newProds)
     } catch (error) {
         console.log(error)
@@ -40,7 +45,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params
     try {
         const result = await prodsMongo.deleteProd(id)
-        res.status(200).json({result})
+        res.status(200).json(result)
     } catch (error) {
         res.status(500).json({ error })
     }

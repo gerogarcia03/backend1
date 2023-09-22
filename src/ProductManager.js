@@ -1,19 +1,37 @@
-import fs from 'fs'
+import { prodsModel } from './db/models/prods.models.js'
+import db from './db/dbConfig.js'
 
 class ProductManager {
     constructor(path) {
         this.path = path
     }
-
-
-    async getProducts() {
+    
+    async getProducts(obj) {
+        
+        const { limit, page, sort, ...query } = obj
+        console.log(obj)
         try {
-            if (fs.existsSync(this.path)) {
-                const prods = await fs.promises.readFile(this.path, 'utf-8')
-                return JSON.parse(prods)
-            } else {
-                return []
+            const result = await prodsModel.paginate(
+                query,
+                { limit, page, sort}
+            )
+            const info = {
+                status: result.status,
+                payload: result.docs,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage
+                         ? `http://localhost:8080/api/users?page=${result.prevPage}`
+                         : null,
+                hasNextPage: result.hasNextPage
+                         ? `http://localhost:8080/api/users?page=${result.nextPage}`
+                         : null,
+                prevLink: result.prevLink,
+                nextLink: result.hasNextPage
             }
+            return info
         } catch (error) {
             return error
         }
@@ -38,64 +56,44 @@ class ProductManager {
 
 
     async getProductById(id) {
-        try {
-            const prods = await this.getProducts()
-            const producto = prods.find((prod) => prod.id === id)
-            if (!producto) {
-                return 'El producto no ha sido encontrado'
-            }
-            return producto
-        } catch (error) {
-            return error
-        }
-    }
-
-    async updateProduct(id, obj) {
-        try {
-            const prods = await this.getProducts()
-            const prodI = prods.findIndex((prod) => prod.id === id)
-            if (prodI === -1) {
-                return 'El producto no ha sido encontrado'
-            }
-            const producto = prods[prodI]
-            prods[prodI] = { ...producto, ...obj }
-            await fs.promises.writeFile(this.path, JSON.stringify(prods))
-        }
-        catch (error) {
-            return error
-        }
-    }
-
-    async deleteProduct(id) {
-        try {
-            const productos = await this.getProducts()
-            const prod = productos.filter((prod) => prod.id !== id)
-            await fs.promises.writeFile(
-                this.path,
-                JSON.stringify(prod),
-                console.log(`El producto con el id ${id} ha sido eliminado`)
-            )
-        } catch (error) {
-            return error
-        }
-    }
-    async createProduct(obj) {
-        try {
-            const prods = await this.addProduct()
-            let id
-            if (!prods.length) {
-                id = 1
-            } else {
-                id = prods[prods.length - 1].id + 1
-            }
-            prods.push(...obj, id)
-            await fs.promises.writeFile(this.path, JSON.stringify(prods))
-        } catch (error) {
-            return error
-
-        }
+    try {
+        const prods = await prodsModel.findById(id)
+        return prods
+    } catch (error) {
+        return error
     }
 }
 
-const productManager = new ProductManager('./public/productos.json')
+    async createProduct(obj) {
+    try {
+        const prods = await prodsModel.create(obj)
+        return prods
+    } catch (error) {
+        return error
+
+    }
+}
+
+    async updateProduct(id, obj) {
+    try {
+        const prods = await prodsModel.updateProduct({ _id: id }, { set: { obj } })
+        return prods
+    }
+    catch (error) {
+        return error
+    }
+}
+
+    async deleteProduct(id) {
+    try {
+        const response = await prodsModel.findByIdAndDelete(id)
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+}
+
+const productManager = new ProductManager()
 export default productManager

@@ -1,47 +1,46 @@
-import { error } from 'console'
-import fs from 'fs'
+import { cartModel } from './db/models/cart.models.js'
 
 class CartManager {
     constructor(path) {
         this.path = path
     }
 
-    async getCartProd() {
+    async getCartProd(obj) {
         try {
-            if (fs.existsSync(this.path)) {
-                const prods = await fs.promises.readFile(this.path, 'utf-8')
-                return JSON.parse(prods)
-            } else {
-                return []
-            }
+            const prods = await cartModel.find(obj)
+            return prods
         } catch (error) {
             return error
         }
     }
 
     async getCartProdById(id) {
-        const prods = this.getCartProd()
-        const prodId = prods.find((prod) => prod.id === id)
-        return prodId
+        try {
+            const prods = await cartModel.findById(id)
+            return prods
+        } catch (error) {
+            return error
+        }
     }
 
     async createCartProd(obj) {
         try {
-            const prods = await this.getCartProd()
-            let id
-            if (!prods.length) {
-                id = 1
-            } else {
-                id = prods[prods.length - 1].id + 1
-            }
-            prods.push({...obj, id})
-            await fs.promises.writeFile(this.path, JSON.stringify(prods))
+            const prods = await cartModel.create(obj)
+            return prods
         } catch (error) {
             return error
         }
+    }
 
+    async deleteCartProd(id) {
+        try {
+            const response = await cartModel.findByIdAndDelete(id)
+            return response
+        } catch (error) {
+            return error
+        }
     }
 }
 
-const cartManager = new CartManager('./public/cart.json')
+const cartManager = new CartManager()
 export default cartManager

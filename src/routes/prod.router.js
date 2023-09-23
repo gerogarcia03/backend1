@@ -5,7 +5,7 @@ const router = Router()
 router.get('/', async (req, res) => {
     try {
         const prods = await productManager.getProducts(req.query)
-        res.status(200).json({prods})
+        res.status(200).json(prods)
     } catch (error) {
         console.log(error)
         res.status(500).json({ error })
@@ -19,7 +19,7 @@ router.get('/:id', async (req, res) => {
         if (!prods) {
             res.status(400).json({ message: 'no encontramos el ID' })
         } else {
-            res.status(200).json({ prods })
+            res.status(200).json( prods )
         }
     } catch (error) {
         console.log(error)

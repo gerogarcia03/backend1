@@ -1,37 +1,35 @@
 import { Router } from "express"
-import cartManager from '../cartManager.js'
-import productManager from "../ProductManager.js"
+import cartManager from '../CartManager.js'
 const router = Router()
 
 router.get('/', async (req, res) => {
-
-    const limit = req.query.limit
-
     try {
-        const prods = await cartManager.getCartProd()
-        if (limit) {
-            res.json(prods.slice(0, limit))
-        }
-        res.json(prods)
+        const prods = await cartManager.getCartProd(req.query)
+        res.status(200).json({ prods })
     } catch (error) {
         res.status(500).json({ error })
     }
 })
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id
+    const { id } = req.params
     try {
-        const prods = await cartManager.getCartProdById(+id)
-        res.status(200).json(prods)
+        const prods = await cartManager.getCartProdById(id)
+        if (!prods) {
+            res.status(400).json({ message: 'no encontramos el ID' })
+        } else {
+            res.status(200).json({ prods })
+        }
     } catch (error) {
         res.status(500).json({ error })
     }
 })
 
 router.post('/', async (req, res) => {
+    const { id, title, price } = req.body
     try {
-        const createCartProd = await cartManager.createCartProd()
-        res.status(200).json({createCartProd})
+        const createProduct = await cartManager.createCartProd(req.body)
+        res.status(200).json(createProduct)
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -40,10 +38,10 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
     try {
-        const result = await productManager.deleteProduct(id)
-        res.status(200).json(result)
+        const result = await cartManager.deleteCartProd(id)
+        res.status(200).json({ result })
     } catch (error) {
-        res.status
+        res.status(500).json({ error })
     }
 })
 

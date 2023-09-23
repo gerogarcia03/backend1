@@ -26,9 +26,8 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const { id, title, price } = req.body
     try {
-        const createProduct = await cartManager.createCartProd(req.body)
+        const createProduct = await cartManager.createCartProd()
         res.status(200).json(createProduct)
     } catch (error) {
         res.status(500).json({ error })

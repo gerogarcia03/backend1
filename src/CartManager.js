@@ -7,7 +7,7 @@ class CartManager {
 
     async getCartProd(obj) {
         try {
-            const prods = await cartModel.find(obj)
+            const prods = await cartModel.find(obj).lean()
             return prods
         } catch (error) {
             return error
@@ -37,6 +37,16 @@ class CartManager {
             const response = await cartModel.findByIdAndDelete(id)
             return response
         } catch (error) {
+            return error
+        }
+    }
+
+    async updateProduct(id, obj) {
+        try {
+            const prods = await cartModel.updateProduct({ _id: id }, { set: { obj } })
+            return prods
+        }
+        catch (error) {
             return error
         }
     }

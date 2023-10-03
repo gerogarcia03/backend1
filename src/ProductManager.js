@@ -1,19 +1,27 @@
 import { prodsModel } from './db/models/prods.models.js'
-import db from './db/dbConfig.js'
+
 
 class ProductManager {
     constructor(path) {
         this.path = path
     }
     
+    async findAll() {
+        try {
+            const prods = prodsModel.find().lean()
+            return prods 
+        } catch (error) {
+            return error
+        }
+    }   
     async getProducts(obj) {
-        
-        const { limit, page, sort, ...query } = obj
-        console.log(obj)
+
+        const { limit = 10, page = 1, sort, ...query } = obj
+
         try {
             const result = await prodsModel.paginate(
                 query,
-                { limit, page, sort}
+                { limit, page, sort }
             )
             const info = {
                 status: result.status,
@@ -23,11 +31,11 @@ class ProductManager {
                 nextPage: result.nextPage,
                 page: result.page,
                 hasPrevPage: result.hasPrevPage
-                         ? `http://localhost:8080/api/users?page=${result.prevPage}`
-                         : null,
+                    ? `http://localhost:8080/api/users?page=${result.prevPage}`
+                    : null,
                 hasNextPage: result.hasNextPage
-                         ? `http://localhost:8080/api/users?page=${result.nextPage}`
-                         : null,
+                    ? `http://localhost:8080/api/users?page=${result.nextPage}`
+                    : null,
                 prevLink: result.prevLink,
                 nextLink: result.hasNextPage
             }
@@ -56,42 +64,42 @@ class ProductManager {
 
 
     async getProductById(id) {
-    try {
-        const prods = await prodsModel.findById(id)
-        return prods
-    } catch (error) {
-        return error
+        try {
+            const prods = await prodsModel.findById(id)
+            return prods
+        } catch (error) {
+            return error
+        }
     }
-}
 
     async createProduct(obj) {
-    try {
-        const prods = await prodsModel.create(obj)
-        return prods
-    } catch (error) {
-        return error
+        try {
+            const prods = await prodsModel.create(obj)
+            return prods
+        } catch (error) {
+            return error
 
+        }
     }
-}
 
     async updateProduct(id, obj) {
-    try {
-        const prods = await prodsModel.updateProduct({ _id: id }, { set: { obj } })
-        return prods
+        try {
+            const prods = await prodsModel.updateProduct({ _id: id }, { set: { obj } })
+            return prods
+        }
+        catch (error) {
+            return error
+        }
     }
-    catch (error) {
-        return error
-    }
-}
 
     async deleteProduct(id) {
-    try {
-        const response = await prodsModel.findByIdAndDelete(id)
-        return response
-    } catch (error) {
-        return error
+        try {
+            const response = await prodsModel.findByIdAndDelete(id)
+            return response
+        } catch (error) {
+            return error
+        }
     }
-}
 
 }
 

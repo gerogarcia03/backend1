@@ -35,12 +35,30 @@ router.post('/', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-    const { id } = req.params
     try {
-        const result = await cartManager.deleteCartProd(id)
+        const result = await cartManager.deleteCartProd()
         res.status(200).json({ result })
     } catch (error) {
         res.status(500).json({ error })
+    }
+})
+
+router.delete('/:id/productos/:pid', async (req, res) => {
+    const pid = req.params.pid
+    try {
+        const result = await cartManager.deleteCartProd(pid)
+        res.status(200).json(result)
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+router.put('/:id/productos/:pid', async(req, res) => {
+    try {
+        const result = await cartManager.updateProduct(req.body)
+        res.status(200).json(result)
+    } catch (error) {
+        res.json(500).json({error})
     }
 })
 

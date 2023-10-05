@@ -6,14 +6,6 @@ class ProductManager {
         this.path = path
     }
     
-    async findAll() {
-        try {
-            const prods = prodsModel.find().lean()
-            return prods 
-        } catch (error) {
-            return error
-        }
-    }   
     async getProducts(obj) {
 
         const { limit = 10, page = 1, sort, ...query } = obj
@@ -47,7 +39,7 @@ class ProductManager {
 
     async addProduct(obj, title, description, price, thumbnail, code, stock) {
         try {
-            const prods = await this.getProducts()
+            const prods = await prodsModel.getProducts()
             let id
             if (!prods.length) {
                 id = 1

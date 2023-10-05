@@ -20,25 +20,20 @@ app.use(express.static('./public'))
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
+app.engine('handlebars', handlebars.engine({ runtimeOptions: { allowProtoPropertiesByDefault: true } }))
 
 //views
 // app.use('/api/productos', productsRouter)
-app.use('/api/productos', async  (req, res) => {
-  const prods = await productManager.findAll()
-  res.render('productos', {prods})
+app.use('/api/productos', async (req, res) => {
+  const prods = await productManager.getProducts(req.query)
+  res.render('productos', { prods })
 })
-
-
-app.use('/api/cart', cartRouter)
-// app.use('/api/cart', async (req, res) => {
-//   const cart = await cartManager.getCartProd() 
-//   res.render('cart', {cart})
-//   console.log(cart)
-// })
-
-
+app.use('/api/cart', async (req, res) => {
+  const cart = await cartManager.getCartProd(req.query)
+  res.render('cart', { cart })
+})
 app.get("/", (req, res) => {
-  res.send('bienvenidos!')
+  res.send('Bienvenidos!')
 })
 
 

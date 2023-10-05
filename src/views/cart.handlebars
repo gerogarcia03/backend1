@@ -9,8 +9,9 @@
       <div>
         <h1>Carrito</h1>
         {{#each cart}}
-          <h2>{{title}}</h2>
-          <p>${{price}}</p>
+          <h2>Title: {{title}}</h2>
+          <p>ID: {{_id}}</p>
+          <p>Price: ${{price}}</p>
         {{/each}}
       </div>
   </body>

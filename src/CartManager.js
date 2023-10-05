@@ -7,7 +7,7 @@ class CartManager {
 
     async getCartProd(obj) {
         try {
-            const prods = await cartModel.find(obj).lean()
+            const prods = await cartModel.find(obj)
             return prods
         } catch (error) {
             return error
@@ -26,6 +26,15 @@ class CartManager {
     async createCartProd(obj) {
         try {
             const prods = await cartModel.create(obj)
+            return prods
+        } catch (error) {
+            return error
+        }
+    }
+
+    async clearCart(id) {
+        try {
+            const prods = await cartModel.deleteMany()
             return prods
         } catch (error) {
             return error

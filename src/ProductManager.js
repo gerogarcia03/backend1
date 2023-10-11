@@ -23,10 +23,10 @@ class ProductManager {
                 nextPage: result.nextPage,
                 page: result.page,
                 hasPrevPage: result.hasPrevPage
-                    ? `http://localhost:8080/api/users?page=${result.prevPage}`
+                    ? `http://localhost:8080/api/products?page=${result.prevPage}`
                     : null,
                 hasNextPage: result.hasNextPage
-                    ? `http://localhost:8080/api/users?page=${result.nextPage}`
+                    ? `http://localhost:8080/api/products?page=${result.nextPage}`
                     : null,
                 prevLink: result.prevLink,
                 nextLink: result.hasNextPage

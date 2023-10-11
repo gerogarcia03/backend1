@@ -7,6 +7,7 @@ import { Server } from 'socket.io'
 import productManager from './ProductManager.js'
 import './db/dbConfig.js'
 import cartManager from './CartManager.js'
+import { create } from 'domain'
 
 
 //express
@@ -24,10 +25,21 @@ app.engine('handlebars', handlebars.engine({ runtimeOptions: { allowProtoPropert
 
 //views
 // app.use('/api/productos', productsRouter)
+app.use('/api/productos/:id', async (req, res) => {
+  const prods = await productManager.getProductById(req.params.id);
+  res.render('productos', { prods: { payload: [prods] } })
+})
+app.post('/api/productos', async (req, res) => {
+  const createProduct = await productManager.createProduct(req.body)
+  res.render('productos', {createProduct})
+})
 app.use('/api/productos', async (req, res) => {
   const prods = await productManager.getProducts(req.query)
   res.render('productos', { prods })
 })
+
+
+
 app.use('/api/cart', async (req, res) => {
   const cart = await cartManager.getCartProd(req.query)
   res.render('cart', { cart })
@@ -50,17 +62,5 @@ socketServer.on('connection', (socket) => {
   console.log('cliente conectado');
   socket.on('disconnect', () => {
     console.log('cliente desconectado')
-  })
-
-  socket
-  socket.on('addProd', (newProduct) => {
-    const addedProd = productManager.addProduct(newProduct);
-    socketServer.emit('addProd', addedProd)
-  })
-
-
-  socket.on('deleteProd', (prodsArray) => {
-    productManager.deleteProduct(Number(prodsArray))
-    socketServer.emit('prodcuto eliminado', prodsArray)
   })
 })

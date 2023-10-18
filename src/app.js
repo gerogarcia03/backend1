@@ -22,8 +22,7 @@ app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
 app.engine('handlebars', handlebars.engine({ runtimeOptions: { allowProtoPropertiesByDefault: true } }))
 
-//views
-// app.use('/api/productos', productsRouter)
+//views prods
 app.delete('/api/productos/:id', async (req, res) => {
   const deleteProduct = await productManager.deleteProduct(req.params.id)
   res.render('productos', { deleteProduct })
@@ -42,6 +41,8 @@ app.use('/api/productos', async (req, res) => {
 })
 
 
+
+//views cart
 app.delete('/api/cart/:id', async (req, res) => {
   const deleteCart = await cartManager.deleteCartProd(req.params.id)
   res.redner('cart', { deleteCart })
@@ -54,6 +55,16 @@ app.use('/api/cart', async (req, res) => {
   const cart = await cartManager.getCartProd(req.query)
   res.render('cart', { cart })
 })
+app.put('/api/cart/:id', async (req, res) => {
+  const cart = await cartManager.updateProduct(req.params.id)
+  res.render('cart', { cart })
+})
+app.put('/api/cart/:id/productos/:pid', async (req, res) => {
+  const cart = await cartManager.updateProduct(req.params.pid)
+  res.render('cart', { cart })
+})
+
+
 app.get("/", (req, res) => {
   res.send('Bienvenidos!')
 })

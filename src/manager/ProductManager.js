@@ -1,4 +1,4 @@
-import { prodsModel } from './db/models/prods.models.js'
+import { prodsModel } from '../db/models/prods.models.js'
 
 
 class ProductManager {

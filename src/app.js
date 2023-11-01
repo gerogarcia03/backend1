@@ -1,12 +1,14 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
-import productsRouter from './routes/prod.router.js'
-import cartRouter from './routes/cart.router.js'
+import longinRouter from './routes/login.router.js'
+import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
 import productManager from './manager/ProductManager.js'
 import './db/dbConfig.js'
 import cartManager from './manager/CartManager.js'
+import FileStore from 'session-file-store'
+import session from 'express-session'
 
 
 //express
@@ -22,7 +24,21 @@ app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
 app.engine('handlebars', handlebars.engine({ runtimeOptions: { allowProtoPropertiesByDefault: true } }))
 
-//views prods
+//sessions
+const filestore = FileStore(session)
+app.use(session({
+  store: new filestore({
+    path: __dirname + '/sessions'
+  }),
+  secret: 'secretSession',
+  cookie: { maxAge: 60000 }
+}))
+
+//login views
+app.use('/api/login', longinRouter)
+app.use('/api/views', viewsRouter)
+
+//prods views
 app.delete('/api/productos/:id', async (req, res) => {
   const deleteProduct = await productManager.deleteProduct(req.params.id)
   res.render('productos', { deleteProduct })
@@ -42,7 +58,7 @@ app.use('/api/productos', async (req, res) => {
 
 
 
-//views cart
+//cart views
 app.delete('/api/cart/:id', async (req, res) => {
   const deleteCart = await cartManager.deleteCartProd(req.params.id)
   res.redner('cart', { deleteCart })
@@ -63,6 +79,7 @@ app.put('/api/cart/:id/productos/:pid', async (req, res) => {
   const cart = await cartManager.updateProduct(req.params.pid)
   res.render('cart', { cart })
 })
+
 
 
 app.get("/", (req, res) => {

@@ -1,7 +1,7 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
-import longinRouter from './routes/login.router.js'
+import loginRouter from './routes/login.router.js'
 import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
 import productManager from './manager/ProductManager.js'
@@ -31,12 +31,11 @@ app.use(session({
     path: __dirname + '/sessions'
   }),
   secret: 'secretSession',
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 6000000 }
 }))
 
 //login views
-app.use('/api/login', longinRouter)
-app.use('/api/views', viewsRouter)
+app.use('/api/login', loginRouter)
 
 //prods views
 app.delete('/api/productos/:id', async (req, res) => {

@@ -9,6 +9,7 @@ import './db/dbConfig.js'
 import cartManager from './manager/CartManager.js'
 import FileStore from 'session-file-store'
 import session from 'express-session'
+import { usersManagers } from './manager/UsersManager.js'
 
 
 //express
@@ -35,7 +36,10 @@ app.use(session({
 }))
 
 //login views
-app.use('/api/login', loginRouter)
+app.use('/api/login', async (req, res)  => {
+  const login = await usersManagers.createUser()
+  res.render('login')
+})
 
 //prods views
 app.delete('/api/productos/:id', async (req, res) => {

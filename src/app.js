@@ -40,6 +40,9 @@ app.use('/api/login', async (req, res)  => {
   const login = await usersManagers.createUser()
   res.render('login')
 })
+app.use('/api/signup', async (req, res) => {
+  res.render('signup')
+})
 
 //prods views
 app.delete('/api/productos/:id', async (req, res) => {
